@@ -232,7 +232,7 @@
 
         <TransitionGroup name="listPost" v-show="status === 'success'" tag="tbody">
           <tr
-            v-for="(post, index) in visiblePosts"
+            v-for="(post, index) in posts"
             :key="post.id"
             class="border-b"
             :style="{ transitionDelay: `${index * 150}ms` }"
@@ -317,7 +317,6 @@ const multipleCategories = ref<Category[]>([])
 const selectErr = ref()
 const category_ids = ref<string[]>([])
 const posts = ref<Post[]>()
-const visiblePosts = ref<Post[]>([])
 const onePost = ref<Post>()
 const categories = ref<Category[]>([])
 const status = ref<Status>('pending')
@@ -463,7 +462,6 @@ const resetValue = () => {
   short_description.value = ''
   multipleCategories.value = []
   category_ids.value = []
-  visiblePosts.value = []
   checkErr.value = ''
 }
 
@@ -472,22 +470,12 @@ const fetchData = () => {
     .then(([responsePosts, responseCategories]) => {
       posts.value = responsePosts
       categories.value = responseCategories
-      animatePosts()
     })
     .finally(() => {
       status.value = 'success'
     })
 }
 
-const animatePosts = async () => {
-  visiblePosts.value = []
-  if (posts.value) {
-    for (const post of posts.value) {
-      visiblePosts.value.push(post) // Add post to visible list
-      await new Promise((resolve) => setTimeout(resolve, 200)) // Delay for 100ms
-    }
-  }
-}
 
 onMounted(() => {
   fetchData()
