@@ -1,5 +1,5 @@
 <template>
-  <AdminLayout>
+  <main id="AdminCategoryPage" class="min-h-screen">
     <div class="mb-5">
       <h1 class="text-2xl font-medium">The Category</h1>
     </div>
@@ -30,11 +30,11 @@
                 id="categoryName"
                 placeholder="Enter name's category"
                 v-model:input="name"
-                :class="[
+                :class="
                   nameError
                     ? 'bg-red-100 ring-red-400 focus:ring-red-600 focus:outline-none focus:border-red-500'
-                    : '',
-                ]"
+                    : ''
+                "
               />
               <p
                 class="w-full mt-2 text-sm font-medium text-red-500 text-"
@@ -72,7 +72,17 @@
                 id="categoryName"
                 placeholder="Enter name's category"
                 v-model:input="name"
+                :class="
+                  nameError
+                    ? 'bg-red-100 ring-red-400 focus:ring-red-600 focus:outline-none focus:border-red-500'
+                    : ''
+                "
               />
+              <p
+                class="w-full mt-2 text-sm font-medium text-red-500 text-"
+                v-if="nameError"
+                v-text="nameError"
+              ></p>
             </div>
             <div class="w-1/2">
               <label
@@ -171,14 +181,13 @@
         </TransitionGroup>
       </table>
     </div>
-  </AdminLayout>
+  </main>
 </template>
 
 <script setup lang="ts">
 import IconPlus from '@/components/icons/IconPlus.vue'
 import ModalDialog from '@/components/common/ModalDialog.vue'
 import BaseInput from '@/components/common/BaseInput.vue'
-import AdminLayout from '@/layouts/AdminLayout.vue'
 import { createSlug, debounce } from '@/helpers'
 import { onMounted, ref, watch } from 'vue'
 import { useAdminStore } from '@/stores/admin'
@@ -208,6 +217,7 @@ const updateSlug = debounce((value: string) => {
 }, 300)
 
 const btnAddNewCategory = () => {
+  resetValue()
   titleModal.value = 'Add New Category'
   modalType.value = 'Add'
   btnCheck.value = true
@@ -276,10 +286,12 @@ const showAlertAndResetDataFetchData = () => {
 const resetValue = () => {
   name.value = ''
   slug.value = ''
+  nameError.value = ''
   checkErr.value = null
 }
 
 const btnEditCategory = (categoryId: string) => {
+  resetValue()
   oneCategory.value = categories.value?.find((item) => item.id == categoryId)
   name.value = oneCategory.value?.name
   slug.value = oneCategory.value?.slug

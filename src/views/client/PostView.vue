@@ -1,5 +1,4 @@
 <script lang="ts" setup>
-import ClientLayout from '@/layouts/ClientLayout.vue'
 import { useClientStore } from '@/stores/client'
 import type { Post } from '@/types/Post'
 import { onMounted, ref } from 'vue'
@@ -19,16 +18,14 @@ onMounted(() => {
 </script>
 
 <template>
-  <ClientLayout>
-    <div class="grid grid-cols-12 gap-6 mt-8">
-      <div class="col-span-12">
-        <h1 class="text-3xl font-medium" v-text="post?.title"></h1>
-      </div>
-      <div class="col-span-12">
-        <div class="text-justify description" v-html="post?.description"></div>
-      </div>
+  <div class="grid grid-cols-12 gap-6 mt-8">
+    <div class="col-span-12">
+      <h1 class="text-3xl font-medium" v-text="post?.title"></h1>
     </div>
-  </ClientLayout>
+    <div class="col-span-12">
+      <div class="text-justify description" v-html="post?.description"></div>
+    </div>
+  </div>
 </template>
 
 <style lang="css">

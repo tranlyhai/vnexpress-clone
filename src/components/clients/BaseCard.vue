@@ -11,7 +11,7 @@ const { post } = toRefs(props)
 <template>
   <RouterLink
     class="grid grid-cols-12 gap-2 p-3 transition-colors border-b hover:bg-gray-50"
-    :to="{ name: 'post-view', params: { slug: post.slug } }"
+    :to="{ name: 'client-post', params: { slug: post.slug } }"
   >
     <div class="col-span-12">
       <p class="font-medium" v-text="post.title"></p>

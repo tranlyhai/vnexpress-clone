@@ -5,17 +5,17 @@ import Cookies from 'universal-cookie'
 const routes = [
   {
     path: '/',
-    name: 'home-view',
+    name: 'client-home',
     component: () => import('@/views/client/HomeView.vue'),
   },
   {
     path: '/category/:slug',
-    name: 'slug',
+    name: 'client-slug',
     component: () => import('@/views/client/CategoryView.vue'),
   },
   {
     path: '/post/:slug',
-    name: 'post-view',
+    name: 'client-post',
     component: () => import('@/views/client/PostView.vue'),
   },
   {
@@ -45,7 +45,7 @@ const routes = [
   },
   {
     path: '/login',
-    name: 'admin-login',
+    name: 'login',
     component: () => import('@/views/admin/AdminLogin.vue'),
     meta: { requiresNoAuth: true },
   },
@@ -68,7 +68,7 @@ router.beforeEach((to, from, next) => {
   }
 
   if (to.meta.requiresAuth && !accessToken) {
-    return next({ name: 'admin-login' })
+    return next({ name: 'login' })
   }
 
   next()

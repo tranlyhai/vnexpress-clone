@@ -46,7 +46,7 @@ export const useAdminStore = defineStore('admin', () => {
       cookies.remove('user_role', {
         path: '/',
       })
-      router.push({ name: 'admin-login' })
+      router.push({ name: 'login' })
     } catch (error) {
       console.error('Error occurred while logging out:', error)
     }

@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import BaseCard from '@/components/clients/BaseCard.vue'
-import ClientLayout from '@/layouts/ClientLayout.vue'
 import { useClientStore } from '@/stores/client'
 import type { Post } from '@/types/Post'
 import { onMounted, ref, watch } from 'vue'
@@ -27,13 +26,16 @@ onMounted(() => {
 </script>
 
 <template>
-  <ClientLayout>
-    <TransitionGroup tag="div" class="grid grid-cols-12 gap-6 mt-8" name="categoryView">
-      <div class="col-span-6" v-for="(post, index) in posts" :key="index" :style="{ transitionDelay: `${index * 200}ms` }">
-        <BaseCard :post="post" />
-      </div>
-    </TransitionGroup>
-  </ClientLayout>
+  <TransitionGroup tag="div" class="grid grid-cols-12 gap-6 mt-8" name="categoryView">
+    <div
+      class="col-span-6"
+      v-for="(post, index) in posts"
+      :key="index"
+      :style="{ transitionDelay: `${index * 200}ms` }"
+    >
+      <BaseCard :post="post" />
+    </div>
+  </TransitionGroup>
 </template>
 
 <style lang="css" scoped>
@@ -54,11 +56,10 @@ onMounted(() => {
 }
 .categoryView-leave-from {
   opacity: 1;
-  transform: translateX(0)
+  transform: translateX(0);
 }
 .categoryView-leave-to {
   opacity: 0;
-  transform: translateX(30px)
+  transform: translateX(30px);
 }
-
 </style>

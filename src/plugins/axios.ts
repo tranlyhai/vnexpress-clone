@@ -1,6 +1,7 @@
 import { type App } from 'vue'
 import axios, { type AxiosInstance } from 'axios'
 import Cookies from 'universal-cookie'
+import { type Router } from 'vue-router'
 
 declare module '@vue/runtime-core' {
   interface ComponentCustomProperties {
@@ -9,7 +10,7 @@ declare module '@vue/runtime-core' {
 }
 
 export default {
-  install(app: App) {
+  install(app: App, options: { router: Router }) {
     const axiosInstance = axios.create({
       baseURL: 'http://localhost:8000/api',
       headers: {
@@ -20,10 +21,11 @@ export default {
 
     const cookies = new Cookies()
 
+
     const refreshCookie = () => {
       cookies.remove('access_token', { path: '/' })
       cookies.remove('user_role', { path: '/' })
-      // window.location.href = 'http://localhost:5173/login'
+      options.router.push({ name: 'login' })
     }
 
     axiosInstance.interceptors.request.use(

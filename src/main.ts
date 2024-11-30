@@ -13,6 +13,6 @@ const pinia = createPinia()
 
 app.use(pinia)
 app.use(router)
-app.use(axiosPlugin)
+app.use(axiosPlugin, { router })
 
 app.mount('#app')

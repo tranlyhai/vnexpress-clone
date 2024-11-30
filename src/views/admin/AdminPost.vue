@@ -1,5 +1,5 @@
 <template>
-  <AdminLayout>
+  <main id="AdminPostPage" class="min-h-screen">
     <div class="mb-5">
       <h1 class="text-2xl font-medium">The Post</h1>
     </div>
@@ -30,7 +30,9 @@
                 id="titlePost"
                 placeholder="Enter title's post"
                 v-model:input="title"
+                :class="titleErr ? 'ring-red-500 bg-red-100' : ''"
               />
+              <p v-if="titleErr" v-text="titleErr" class="mt-1 text-red-600"></p>
             </div>
             <div class="basis-full">
               <label
@@ -62,8 +64,9 @@
                 :clear-on-select="false"
                 label="name"
                 track-by="name"
-                placeholder="Pick some"
+                placeholder="Pick some category"
                 :preserve-search="true"
+                :required="true"
               >
                 <template #selection="{ values, isOpen }">
                   <span
@@ -75,6 +78,7 @@
                   ></span>
                 </template>
               </Multiselect>
+              <p v-if="selectErr" v-text="selectErr" class="mt-1 text-red-600"></p>
             </div>
             <div class="basis-full">
               <label
@@ -88,7 +92,13 @@
                 name="short_description"
                 id="short_description"
                 placeholder="Enter short description"
+                :class="short_descriptionErr ? 'ring-red-500 bg-red-100' : ''"
               ></textarea>
+              <p
+                v-if="short_descriptionErr"
+                v-text="short_descriptionErr"
+                class="mt-1 text-red-600"
+              ></p>
             </div>
             <div class="basis-full">
               <label
@@ -96,7 +106,8 @@
                 class="block pr-4 mb-2 text-sm font-medium text-gray-900 cursor-pointer max-w-max"
                 >Description</label
               >
-              <TipTap v-model="description" />
+              <TipTap v-model="description" :class="descriptionErr ? 'bg-red-200' : ''" />
+              <p v-if="descriptionErr" v-text="descriptionErr" class="mt-1 text-red-600"></p>
             </div>
           </div>
           <div class="flex flex-col gap-2" v-if="modalType === 'Edit'">
@@ -112,7 +123,9 @@
                 id="titlePost"
                 placeholder="Enter title's post"
                 v-model:input="title"
+                :class="titleErr ? 'ring-red-500 bg-red-100' : ''"
               />
+              <p v-if="titleErr" v-text="titleErr" class="mt-1 text-red-600"></p>
             </div>
             <div class="basis-full">
               <label
@@ -146,6 +159,7 @@
                 track-by="name"
                 placeholder="Pick some"
                 :preserve-search="true"
+                :required="true"
               >
                 <template #selection="{ values, isOpen }">
                   <span
@@ -157,6 +171,7 @@
                   ></span>
                 </template>
               </Multiselect>
+              <p v-if="selectErr" v-text="selectErr" class="mt-1 text-red-600"></p>
             </div>
             <div class="basis-full">
               <label
@@ -170,7 +185,13 @@
                 name="short_description"
                 id="short_description"
                 placeholder="enter short description"
+                :class="short_descriptionErr ? 'ring-red-500 bg-red-100' : ''"
               ></textarea>
+              <p
+                v-if="short_descriptionErr"
+                v-text="short_descriptionErr"
+                class="mt-1 text-red-600"
+              ></p>
             </div>
             <div class="basis-full">
               <label
@@ -178,7 +199,8 @@
                 class="block pr-4 mb-2 text-sm font-medium text-gray-900 cursor-pointer max-w-max"
                 >Description</label
               >
-              <TipTap v-model="description" />
+              <TipTap v-model="description" :class="descriptionErr ? 'bg-red-200' : ''" />
+              <p v-if="descriptionErr" v-text="descriptionErr" class="mt-1 text-red-600"></p>
             </div>
           </div>
         </template>
@@ -229,7 +251,6 @@
             </td>
           </tr>
         </tbody>
-
         <TransitionGroup name="listPost" v-show="status === 'success'" tag="tbody">
           <tr
             v-for="(post, index) in posts"
@@ -281,12 +302,11 @@
         </TransitionGroup>
       </table>
     </div>
-  </AdminLayout>
+  </main>
 </template>
 
 <script lang="ts" setup>
 import IconPlus from '@/components/icons/IconPlus.vue'
-import AdminLayout from '@/layouts/AdminLayout.vue'
 import ModalDialog from '@/components/common/ModalDialog.vue'
 import BaseInput from '@/components/common/BaseInput.vue'
 import TipTap from '@/components/admin/TipTap.vue'
@@ -343,9 +363,9 @@ const btnAddNewPost = () => {
   titleModal.value = 'Add New Post'
   modalType.value = 'Add'
 }
-const actionAddNewPost = () => {
+const actionAddNewPost = async () => {
   category_ids.value = multipleCategories.value.map((item) => item.id)
-  adminStore.createPost(
+  await adminStore.createPost(
     title.value,
     slug.value,
     short_description.value,
@@ -357,7 +377,7 @@ const actionAddNewPost = () => {
     titleErr.value = checkErr.value.errors.title[0]
     descriptionErr.value = checkErr.value.errors.description[0]
     short_descriptionErr.value = checkErr.value.errors.short_description[0]
-    if (checkErr.value.errors.category_ids[0]) selectErr.value = 'Please choose a category'
+    if (category_ids.value.length === 0) selectErr.value = 'Please choose a category'
     return
   }
 
@@ -459,6 +479,10 @@ const resetValue = () => {
   title.value = ''
   slug.value = ''
   description.value = ''
+  titleErr.value = ''
+  short_descriptionErr.value = ''
+  descriptionErr.value = ''
+  selectErr.value = ''
   short_description.value = ''
   multipleCategories.value = []
   category_ids.value = []
@@ -475,7 +499,6 @@ const fetchData = () => {
       status.value = 'success'
     })
 }
-
 
 onMounted(() => {
   fetchData()

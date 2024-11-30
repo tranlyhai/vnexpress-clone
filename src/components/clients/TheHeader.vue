@@ -54,7 +54,7 @@ onMounted(() => {
             </div>
             <div class="flex items-center justify-center flex-1 sm:items-stretch sm:justify-start">
               <div class="flex items-center shrink-0">
-                <RouterLink :to="{ name: 'home-view' }">
+                <RouterLink :to="{ name: 'client-home' }">
                   <img
                     class="w-auto h-8"
                     src="https://s1.vnecdn.net/vnexpress/restruct/i/v9529/v2_2019/pc/graphics/logo.svg"
